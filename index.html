@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>VueJS</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		<input v-model="message">
+		<button @click="addTodo">Cliquez ici</button>
+
+		<br>
+
+		<div class="content">
+			<div class="column">
+				<h2>Todo</h2>
+				<todo-item
+					v-for="(item, i) in todo"
+					:key="i"
+					v-if="item.state === 0"
+					:todo-item="item"
+					v-on:update-name-in-parent="changeName(i)" />
+			</div>
+
+			<div class="column">
+				<h2>Doing</h2>
+				<todo-item
+					v-for="(item, i) in todo"
+					:key="i"
+					v-if="item.state === 1"
+					:todo-item="item"
+					v-on:update-name-in-parent="changeName(i)" />
+			</div>
+
+			<div class="column">
+				<h2>Done</h2>
+				<todo-item
+					v-for="(item, i) in todo"
+					:key="i"
+					v-if="item.state === 2"
+					:todo-item="item"
+					v-on:update-name-in-parent="changeName(i)" />
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	Vue.component('todo-item', {
+		props: ['todoItem'],
+		template: `
+		<div>
+			<h3>{{ todoItem.name }}</h3>
+			<button @click="$emit('update-name-in-parent')">Change Name</button>
+		</div>
+		`
+	});
+
+	new Vue({
+		el: '#app',
+		data: {
+			message: "Hello World",
+			todo: []
+		},
+		methods: {
+			addTodo() {
+				this.todo.push({
+					name: this.message,
+					state: 0,
+					content: ""
+				});
+			},
+			changeName(i) {
+				this.todo[i].name = "Coucou Les Gens";
+			},
+			changeState(i) {
+				if (this.todo[i].state == 1) {
+					this.todo[i].state == 2;
+				};
+			}
+		}
+	})
+</script>
+</html>
